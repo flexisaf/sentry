@@ -96,15 +96,7 @@ import ReleaseNewEvents from './views/releaseNewEvents';
 import ReleaseOverview from './views/releases/releaseOverview';
 import RouteNotFound from './views/routeNotFound';
 import SetCallsignsAction from './views/requiredAdminActions/setCallsigns';
-<<<<<<< HEAD
-import SettingsIndex from './views/settings/settingsIndex';
-import SettingsWrapper from './views/settings/settingsWrapper';
 import SettingsProjectProvider from './views/settings/settingsProjectProvider';
-||||||| merged common ancestors
-import SettingsIndex from './views/settings/settingsIndex';
-import SettingsWrapper from './views/settings/settingsWrapper';
-=======
->>>>>>> feat/ui/code-split-account-notifications
 import SharedGroupDetails from './views/sharedGroupDetails';
 import Stream from './views/stream';
 import TeamCreate from './views/teamCreate';
