@@ -143,6 +143,9 @@ const accountSettingsRoutes = [
   />,
 
   <Route key="api" path="api/" name="API">
+    <IndexRedirect to="auth-tokens/" />
+    <Route path="auth-tokens/" name="Auth Tokens" component={errorHandler(ApiTokens)} />
+
     <Route path="applications/" name="Applications">
       <IndexRoute
         getComponent={() =>
