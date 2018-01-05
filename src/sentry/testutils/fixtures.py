@@ -285,6 +285,15 @@ class Fixtures(object):
 
     def create_project(self, **kwargs):
         teams = kwargs.pop('teams', None)
+
+        # TOOD(jess): this is just to keep backwards compat
+        # for sentry-plugins and getsentry. Remove once those
+        # are updated
+        team = kwargs.pop('team', None)
+        assert team is None or teams is None
+        if team is not None:
+            teams = [team]
+
         if teams is None:
             teams = [self.team]
         # TODO(jess): remove when deprecated
