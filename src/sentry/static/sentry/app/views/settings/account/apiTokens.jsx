@@ -1,62 +1,16 @@
 import {Box, Flex} from 'grid-emotion';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import {t, tct} from '../../../locale';
+import ApiTokenRow from './apiTokenRow';
 import AsyncView from '../../asyncView';
-import AutoSelectText from '../../../components/autoSelectText';
 import Button from '../../../components/buttons/button';
-import DateTime from '../../../components/dateTime';
 import EmptyMessage from '../components/emptyMessage';
 import IndicatorStore from '../../../stores/indicatorStore';
 import Panel from '../components/panel';
 import PanelBody from '../components/panelBody';
 import PanelHeader from '../components/panelHeader';
-import Row from '../components/row';
 import SettingsPageHeader from '../components/settingsPageHeader';
-
-class ApiTokenRow extends React.Component {
-  static propTypes = {
-    token: PropTypes.object.isRequired,
-    onRemove: PropTypes.func.isRequired,
-  };
-
-  onRemove = () => {
-    this.props.onRemove(this.props.token);
-  };
-
-  render() {
-    let token = this.props.token;
-
-    return (
-      <Row justify="space-between" px={2} py={2}>
-        <Box flex="1">
-          <div style={{marginBottom: 5}}>
-            <small>
-              <AutoSelectText>{token.token}</AutoSelectText>
-            </small>
-          </div>
-          <div style={{marginBottom: 5}}>
-            <small>
-              Created <DateTime date={token.dateCreated} />
-            </small>
-          </div>
-          <div>
-            <small style={{color: '#999'}}>{token.scopes.join(', ')}</small>
-          </div>
-        </Box>
-
-        <Flex align="center">
-          <Box pl={2}>
-            <Button onClick={this.handleRemove}>
-              <span className="icon icon-trash" />
-            </Button>
-          </Box>
-        </Flex>
-      </Row>
-    );
-  }
-}
 
 class ApiTokens extends AsyncView {
   getTitle() {
@@ -77,20 +31,29 @@ class ApiTokens extends AsyncView {
 
   handleRemoveToken = token => {
     let loadingIndicator = IndicatorStore.add(t('Saving changes..'));
-    this.api.request('/api-tokens/', {
-      method: 'DELETE',
-      data: {token: token.token},
-      success: data => {
-        IndicatorStore.remove(loadingIndicator);
-        this.setState({
-          tokenList: this.state.tokenList.filter(tk => tk.token !== token.token),
-        });
-      },
-      error: () => {
-        IndicatorStore.remove(loadingIndicator);
-        IndicatorStore.add(t('Unable to remove token. Please try again.'), 'error');
-      },
-    });
+    let oldTokenList = this.state.tokenList;
+
+    this.setState(
+      state => ({
+        tokenList: state.tokenList.filter(tk => tk.token !== token.token),
+      }),
+      () =>
+        this.api.request('/api-tokens/', {
+          method: 'DELETE',
+          data: {token: token.token},
+          success: data => {
+            IndicatorStore.remove(loadingIndicator);
+            IndicatorStore.addSuccess(t('Removed token'));
+          },
+          error: () => {
+            IndicatorStore.remove(loadingIndicator);
+            IndicatorStore.addError(t('Unable to remove token. Please try again.'));
+            this.setState({
+              tokenList: oldTokenList,
+            });
+          },
+        })
+    );
   };
 
   renderBody() {
