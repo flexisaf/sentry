@@ -4,8 +4,9 @@ import React from 'react';
 
 import {API_SCOPES, DEFAULT_API_SCOPES} from '../../../constants';
 import {t, tct} from '../../../locale';
-import ApiForm from '../../../components/forms/apiForm';
-import MultipleCheckboxField from '../../../components/forms/multipleCheckboxField';
+import ApiForm from '../components/forms/apiForm';
+import FormField from '../components/forms/formField';
+import MultipleCheckbox from '../components/forms/controls/multipleCheckbox';
 import Panel from '../components/panel';
 import PanelBody from '../components/panelBody';
 import PanelHeader from '../components/panelHeader';
@@ -44,23 +45,36 @@ export default class ApiNewToken extends React.Component {
           </p>
           <Panel>
             <PanelHeader>{t('Create New Token')}</PanelHeader>
-            <PanelBody>
-              <ApiForm
-                apiMethod="POST"
-                apiEndpoint="/api-tokens/"
-                className="form-stacked api-new-token"
-                initialData={{scopes: SORTED_DEFAULT_API_SCOPES}}
-                onSubmitSuccess={this.onSubmitSuccess}
-                onCancel={this.onCancel}
-              >
-                <MultipleCheckboxField
+            <ApiForm
+              apiMethod="POST"
+              apiEndpoint="/api-tokens/"
+              initialData={{scopes: SORTED_DEFAULT_API_SCOPES}}
+              onSubmitSuccess={this.onSubmitSuccess}
+              onCancel={this.onCancel}
+              footerStyle={{
+                marginTop: 0,
+                paddingRight: 20,
+              }}
+              submitLabel={t('Create Token')}
+            >
+              <PanelBody>
+                <FormField
                   name="scopes"
                   choices={API_CHOICES}
                   label={t('Scopes')}
-                  required={true}
-                />
-              </ApiForm>
-            </PanelBody>
+                  inline={false}
+                  required
+                >
+                  {({value, onChange}) => (
+                    <MultipleCheckbox
+                      onChange={onChange}
+                      value={value.peek()}
+                      choices={API_CHOICES}
+                    />
+                  )}
+                </FormField>
+              </PanelBody>
+            </ApiForm>
           </Panel>
         </div>
       </DocumentTitle>
