@@ -64,9 +64,9 @@ class ProjectSearchDetailsEndpoint(ProjectEndpoint):
         except SavedSearch.DoesNotExist:
             raise ResourceDoesNotExist
 
-        has_team_scope = any([
+        has_team_scope = any(
             request.access.has_team_scope(team, 'project:write') for team in project.teams.all()
-        ])
+        )
         if has_team_scope:
             serializer = SavedSearchSerializer(data=request.DATA, partial=True)
         else:

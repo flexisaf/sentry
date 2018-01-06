@@ -24,9 +24,9 @@ class ProjectPermission(OrganizationPermission):
         if not result:
             return result
 
-        return any([
+        return any(
             has_team_permission(request, team, self.scope_map) for team in project.teams.all()
-        ])
+        )
 
 
 class StrictProjectPermission(ProjectPermission):

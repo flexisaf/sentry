@@ -165,8 +165,6 @@ class ProjectWithTeamSerializer(ProjectSerializer):
             ).select_related('team')
         )
 
-        # TODO(jess): decide if we should only include teams the user
-        # has access to
         teams = {d['id']: d for d in serialize(
             list(set(pt.team for pt in project_teams)), user)}
 

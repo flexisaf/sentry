@@ -71,7 +71,7 @@ class TeamSerializer(Serializer):
 
 class TeamWithProjectsSerializer(TeamSerializer):
     def get_attrs(self, item_list, user):
-        project_team_qs = list(
+        project_teams = list(
             ProjectTeam.objects.filter(
                 team__in=item_list,
                 project__status=ProjectStatus.VISIBLE,
@@ -82,18 +82,18 @@ class TeamWithProjectsSerializer(TeamSerializer):
         # TODO(dcramer): we should query in bulk for ones we're missing here
         orgs = {i.organization_id: i.organization for i in item_list}
 
-        for project_team in project_team_qs:
+        for project_team in project_teams:
             # TODO(jess): remove when we've completely deprecated Project.team
             project_team.project._team_cache = team_map[project_team.project.team_id]
             project_team.project._organization_cache = orgs[project_team.project.organization_id]
 
-        projects = [pt.project for pt in project_team_qs]
+        projects = [pt.project for pt in project_teams]
         projects_by_id = {
             project.id: data for project, data in zip(projects, serialize(projects, user))
         }
 
         project_map = defaultdict(list)
-        for project_team in project_team_qs:
+        for project_team in project_teams:
             project_map[project_team.team_id].append(projects_by_id[project_team.project_id])
 
         result = super(TeamWithProjectsSerializer, self).get_attrs(item_list, user)

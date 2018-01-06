@@ -8,6 +8,7 @@ sentry.models.team
 from __future__ import absolute_import, print_function
 
 import warnings
+from collections import defaultdict
 
 from django.conf import settings
 from django.db import connections, IntegrityError, models, router, transaction
@@ -78,7 +79,7 @@ class TeamManager(BaseManager):
                 key=lambda x: x.name.lower()
             )
 
-            teams_by_project = {p.id: set() for p in project_list}
+            teams_by_project = defaultdict(set)
             for project_id, team_id in ProjectTeam.objects.filter(
                 project__in=project_list,
             ).values_list('project_id', 'team_id'):
