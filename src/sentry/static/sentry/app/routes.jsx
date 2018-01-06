@@ -2,6 +2,7 @@ import {Redirect, Route, IndexRoute, IndexRedirect} from 'react-router';
 import React from 'react';
 
 import AccountAuthorizations from './views/accountAuthorizations';
+import NewAccountAuthorizations from './views/settings/account/accountAuthorizations';
 import AccountLayout from './views/accountLayout';
 import AccountSettingsLayout from './views/settings/account/accountSettingsLayout';
 import AccountNotifications from './views/settings/account/accountNotifications';
@@ -140,6 +141,12 @@ const accountSettingsRoutes = [
     path="avatar/"
     name="Avatar"
     component={errorHandler(AccountAvatar)}
+  />,
+
+  <Route
+    key="authorizations/"
+    path="authorizations/"
+    component={errorHandler(NewAccountAuthorizations)}
   />,
 ];
 

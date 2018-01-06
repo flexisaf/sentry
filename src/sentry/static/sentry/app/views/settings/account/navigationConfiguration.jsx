@@ -18,6 +18,10 @@ const accountNavigation = [
         path: `${pathPrefix}/emails/`,
         title: t('Emails'),
       },
+      {
+        path: `${pathPrefix}/authorizations/`,
+        title: t('Authorized Applications'),
+      },
     ],
   },
 ];
