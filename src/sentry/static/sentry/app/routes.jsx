@@ -8,6 +8,7 @@ import AccountNotifications from './views/settings/account/accountNotifications'
 import AccountNotificationFineTuning from './views/settings/account/accountNotificationFineTuning';
 import AccountEmails from './views/settings/account/accountEmails';
 import AccountAvatar from './views/settings/account/avatar';
+import AccountSubscriptions from './views/settings/account/accountSubscriptions';
 
 import AdminBuffer from './views/adminBuffer';
 import AdminLayout from './views/adminLayout';
@@ -140,6 +141,12 @@ const accountSettingsRoutes = [
     path="avatar/"
     name="Avatar"
     component={errorHandler(AccountAvatar)}
+  />,
+  <Route
+    key="subscriptions/"
+    path="subscriptions/"
+    name="Subscriptions"
+    component={errorHandler(AccountSubscriptions)}
   />,
 ];
 
